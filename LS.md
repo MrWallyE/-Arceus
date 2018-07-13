@@ -18,12 +18,15 @@
 
 # 搭建Web服务器
 
-时间：2018.7.12至
+时间：2018.7.12至2018.7.13
 
 内容: （了解概念居多）
 
 1. [正向代理与反向代理](https://www.cnblogs.com/Anker/p/6056540.html)
-2. [Django，Nginx和uWSGI关系简介](https://blog.csdn.net/cjsh_123456/article/details/80086356)
-3. [服务器端口](https://baike.baidu.com/item/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%A3/718781?fr=aladdin)
-4. 
+2. [服务器端口](https://baike.baidu.com/item/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%A3/718781?fr=aladdin)
+3. [Web服务器Nginx+PHP](https://blog.csdn.net/tstarrow/article/details/38269515)
+4. [django,uwsgi,nginx安装与设置](https://blog.csdn.net/weixiazailaide/article/details/52735076)
+5. [Django，Nginx和uWSGI关系简介](https://blog.csdn.net/cjsh_123456/article/details/80086356)
+
+# Socket和串口通信的程序 
 
