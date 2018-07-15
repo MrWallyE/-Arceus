@@ -30,3 +30,13 @@
 
 # Socket和串口通信的程序 
 
+
+
+# 创建账户以及赋予其超级权限
+
+时间：2018.7.15
+
+内容:
+
+1. [Linux 入门基础](http://study.163.com/course/courseMain.htm?courseId=232007) (用户相关内容)
+2. [linux添加管理员用户](https://jingyan.baidu.com/album/20b68a889a0147796cec621d.html?picindex=2)
