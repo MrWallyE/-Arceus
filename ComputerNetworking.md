@@ -366,3 +366,125 @@ Cookies的使用非常广泛！
 - cache 可以运行在客户端和服务器端
 - 通常 cache 由 ISP 部署
 
+
+
+## FTP：文件传输协议
+
+- 客户机与服务器之间传送文件
+
+- client/server model
+
+  client：初始化传输（either to/from remote）
+
+  server：远处主机
+
+- ftp：RFC 959
+
+- ftp server：port 21
+
+
+
+控制/传输连接
+
+- FTP 客户在21号端口与服务器连接，使用TCP
+
+- client 在控制连接被授权
+
+- client 通过控制连接浏览服务器目录
+
+- server 接到文件传输命令，打开第二个 TCP 连接
+
+- 文件传输完毕后，关闭传输连接
+
+- FTP server 维护状态：当前目录，认证状态
+
+- 控制连接使用：“带外传输”
+
+  server 打开单独的 TCP 传输文件（在21号端口连接，在20号端口传输文件）
+
+
+
+命令，响应
+
+Sample commands：
+
+- 在控制信道发送ASCII格式命令
+- USER username
+- PASS password
+- LIST 返回当前目录的文件列表
+- RETR filename 下载指定文件
+- STOR filename 上传文件至服务器当前目录
+
+
+
+Sample return codes
+
+- 状态码和简明说明（类似HTTP）
+
+- 331 Username OK，
+
+  password required
+
+- 125 data connection
+
+  already open；transfer starting
+
+- 425 Can't open data connection
+
+- 452 Error writing file
+
+
+
+## 电子邮件
+
+三个组成部分：
+
+- 用户代理（User Agent）
+- 邮件服务器（Mail Servers）
+- 简单邮件传输协议：SMTP
+
+### User Agent
+
+- 书写，编辑，阅读邮件信息
+- e.g.,Eudora，Outlook，elm，Mozilla，Thunderbird
+- 外出及进来的邮件都保留在服务器
+
+### Mail Servers
+
+- 邮箱：mailbox
+
+  保留用户邮件
+
+- 邮件队列：message queue
+
+  等待发送的邮件
+
+### SMTP protocol
+
+服务器之间交换邮件的协议
+
+- client：发送邮件服务器或客户端
+
+- server：接收邮件的服务器
+
+- 使用TCP从客户端可靠的传输邮件信息到服务器
+
+- 使用端口25
+
+- 直接传送：发送服务器直接发送给邮件至接收服务器
+
+- 传输的三个阶段：
+
+  1）握手 handshaking（greeting）
+
+  2）传输 transfer of messages
+
+  3）关闭 closure
+
+- command/response 交互模式
+
+  命令 commands：ASCII 文本
+
+  响应 response：状态码和简明说明
+
+- 消息是7-bit ASCII 字符
