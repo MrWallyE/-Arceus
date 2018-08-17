@@ -384,7 +384,7 @@ Cookies的使用非常广泛！
 
 
 
-控制/传输连接
+### 控制/传输连接
 
 - FTP 客户在21号端口与服务器连接，使用TCP
 
@@ -404,7 +404,7 @@ Cookies的使用非常广泛！
 
 
 
-命令，响应
+### 命令，响应
 
 Sample commands：
 
@@ -488,3 +488,132 @@ Sample return codes
   响应 response：状态码和简明说明
 
 - 消息是7-bit ASCII 字符
+
+
+
+后话
+
+- SMTP 使用持久连接
+
+- SMTP 消息采用（header & body）7-bit ASCII 编码
+
+- SMTP server 使用
+
+  CRLF . CRLF 判断消息的结束
+
+
+
+与HTTP的比较
+
+- HTTP：拉 pull
+
+- SMTP：推 push
+
+- 都使用ASCII
+
+  command/response 进行交互，status codes
+
+- HTTP：每个 object 都有响应消息
+
+- SMTP：多个 objects 在同一个消息中发送
+
+
+
+### 邮件消息格式
+
+SMTP：交换电子邮件的协议
+
+RFC 822：消息的标准文本格式：
+
+- header lines，e.g.,
+
+  To：
+
+  From：
+
+  Subject：
+
+- body
+
+  the “message”，ASCII character only
+
+
+
+### 消息格式：多用途电子邮件扩展
+
+- MIME：多用途电子邮件扩展，RFC 2045，2056
+- 消息头部的附加行说明MIME内容类型
+
+
+
+### 邮件访问协议
+
+- SMTP：发送邮件到接收者服务器
+
+- Mail access protocol：从邮件服务器获取邮件
+
+  **1）POP：Post Office Protocol [RFC 1939]**
+
+  认证（agent <--> server）和下载
+
+  **2）IMAP：Internet Mail Access Protocol [RFC 1730]**
+
+  更多的特性
+
+  能够在服务器上对邮件做某些操作
+
+  **3）HTTP：gmail，Hotmail，Yahoo！Mail，etc.**
+
+
+
+<u>**POP3 protocol**</u>
+
+**认证阶段**
+
+client 命令：
+
+- user：username
+- pass：password
+
+server 响应
+
+- +OK
+- -ERR
+
+
+
+**事务阶段**
+
+client：
+
+- list：列出消息数量
+- retr：根据消息序号检索消息
+- dele：删除
+- quit
+
+
+
+<u>**POP3（more）and IMAP**</u>
+
+More about POP3
+
+- 使用“Download and delete”模式，一个UA访问后邮件不能被其他UA访问
+- 使用“Download and keep”模式允许不同UA访问
+- POP3 是无状态协议
+
+IMAP
+
+- 所有信息保留在一个地方：server
+
+- 所有用户通过文件夹组织消息
+
+- IMAP 中 sessions 中保持用户状态
+
+  文件夹的名字
+
+  文件夹和消息ID的对应关系
+
+
+
+## DNS域名系统
+
