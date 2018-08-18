@@ -617,3 +617,196 @@ IMAP
 
 ## DNS域名系统
 
+Internet 主机，路由：
+
+- IP 地址（32 bit）-> 用于数据报寻址
+- 域名 -> 用于用户识别
+
+
+
+DNS：Domain Name System 域名系统
+
+- 分布式数据库 -> 具有层次结构的多个域名服务器
+- 应用层协议 -> 主机，路由，域名服务器互相通信完成解析
+
+
+
+### DNS 服务
+
+- 主机名到IP地址的翻译
+- 主机别名
+- 邮件服务器别名
+- 负载均衡
+
+
+
+### 分布式/层次化的数据库
+
+**为什么不是集中化DNS？**
+
+- 单点错误
+- 通信负载
+- 延迟
+- 维护
+
+
+
+**例子：一个希望获得 www.amazon.com IP 的 client A.**
+
+- client A 查询 root server 获得 com DNS server
+- client A 查询 com DNS server -> 获得amazon.com DNS server
+- client A 查询amazon.com DNS server  -> 获得www.amazon.com IP地址
+
+
+
+#### 根域名服务器（Root name server）
+
+- 本地域名服务器（local name server）与根域名服务器联系
+
+- 根域名服务器：
+
+  1）与权威域名服务器联系完成域名映射
+
+  2）返回给本地域名服务器结果
+
+
+
+#### 顶级域名服务器（Top-level domain，TLD）
+
+- 负责com，org，net，edu，etc，以及所有区域顶级域名uk，fr，ca，jp
+- Network Solutions 维护 com TLD
+- Educause 维护 edu TLD
+
+
+
+#### 权威域名服务器（Authoritative Servers）
+
+- 一个单位的域名服务器，为本单位负责服务器与IP地址之间的映射（e.g., Web, mail）
+- 由本单位维护或者ISP维护
+
+
+
+#### 本地域名服务器（Local Name Server）
+
+- 不是严格的属于域名服务器的层次结构
+- 每个ISP（区域ISP，大学，公司）都有自己的LNS（也称“默认域名服务器”）
+- 当主机进行DNS查询，查询转发给LNS
+
+
+
+### 迭代查询
+
+- LNS依次查询域名服务器层次结构中的各个服务器最终获得该主机地址
+
+### 递归查询
+
+- 将查询的负担完全交给了查询对象
+
+
+
+### Caching和记录更新
+
+- 一个 DNS server 了解到域名映射后，它会caches映射
+
+  1）cache 有一定的timeout时间
+
+  2）TLD servers 通常会在 LNS cache保存
+
+- #### Update/notify 机制的设计在IETF文档中有说明（RFC 2136）
+
+
+
+### DNS 记录
+
+分布式存储数据库记录（resource records，RR）
+
+RR format：（name，value，type，ttl）
+
+- Type=A
+
+  name 是主机名
+
+  value 是地址
+
+  
+
+- Type=CNAME
+
+  name 是某台主机的别名
+
+  value 是权威的名字
+
+  
+
+- Type=NS
+
+  name 是域名
+
+  value 是本域的权威域名服务器
+
+  （维护用）
+
+  
+
+- Type=MX
+
+  value 是邮件服务器的名字
+
+
+
+### DNS 协议
+
+query 和 reply 消息，具有相同的格式
+
+
+
+**msg header**
+
+- identification：16 bit
+
+  用于标识 query，reply 时检索那一次查询
+
+- flags
+
+  query or reply
+
+  recursion desired
+
+  recursion available
+
+  reply is authoritative
+
+
+
+### DNS安全性
+
+#### DDoS攻击
+
+- 流量轰击根服务器
+
+  Traffic Filtering
+
+  Local DNS cache
+
+- 流量轰击 TLD 服务器潜在危险性更强
+
+
+
+#### 重定向攻击（Redirect attacks）
+
+- Man-in-middle
+
+  查询劫持
+
+- DNS 污染
+
+  发送虚假 DNS 响应
+
+
+
+#### 利用DNS进行DDoS攻击
+
+- 发送虚假的回复IP 地址
+
+
+
