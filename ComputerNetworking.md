@@ -810,3 +810,91 @@ query 和 reply 消息，具有相同的格式
 
 
 
+## P2P应用
+
+### 纯P2P架构
+
+- 没有服务器
+- 端系统之间直接通信
+- 端系统：经常改变IP间歇性地连接
+
+### 应用方向
+
+- 文件分发
+- DHT
+
+
+
+#### 文件分发：BitTorrent
+
+- Peer 加入 torrent
+
+  1）开始没有 chunks，但是慢慢从其他地方下载积累
+
+  2）在 tracker 注册获得peers 列表
+
+  3）与相邻的peers（“neighbors”）取得联系
+
+- Peer downloading，同时 uploading chunks 给其他 peers
+
+- Peer 加入离开时动态
+
+- Peer 下载完成，可能离开（selfishly）或继续（altruistically）
+
+<u>**Pulling Chunks**</u>
+
+- 不同peers具有不同的文件chunks
+- 周期性的，peer（Alice）问相邻peer获得chunks列表
+- Alice发送缺失的chunks列表（rarest first 最罕见优先）
+
+**<u>Sending Chunks：tit-for-tat</u>**
+
+- Alice发送chunks给四个速度最快的邻居
+
+- every 10 secs 
+
+  重估top 4
+
+- every 30 secs
+
+  随机选择一个节点加入传输
+
+  -可能成为最快的top 4
+
+  -“optimistically unchoke”
+
+
+
+#### Distributed Hash Table（DHT）
+
+Hash Table
+
+- 能够方便的存储和搜索数值表示的键值
+- key = hash（original key）
+
+Distributed Hash Table
+
+- 在数百万的peer间分配（key，value）对
+
+  键值对在peers间分配均匀
+
+- 所有peer能够query在数据库中查询关键字
+
+  数据库返回key的value
+
+  查询过程中，相关的peers节点间交换少量的消息
+
+- 每个peer仅知道几个其他的peer节点
+
+- Peer能够加入和离开（churn）
+
+
+
+给peers分配key-value对
+
+- 规则：将key-value对分配给具有最近ID（closest ID）的peer节点
+- 惯例：最近的peer节点是有key的（immediate successor）
+
+
+
+## Socket编程

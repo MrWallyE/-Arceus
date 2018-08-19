@@ -34,8 +34,10 @@
 
 内容：
 
-1. [计算机网络自学笔记](https://www.icourse163.org/learn/HDU-1002598057?tid=1002788111#/learn/content?type=detail&id=1004060885&cid=1004996388)
+1. [计算机网络自学笔记](https://www.icourse163.org/learn/HDU-1002598057?tid=1002788111#/learn/content?type=detail&id=1004060885&cid=1004996388)（应用层内容）
 2. 
+
+笔记：详见ComputerNetworking.md
 
 # 创建账户以及赋予其超级权限
 
