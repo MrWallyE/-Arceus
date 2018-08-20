@@ -728,15 +728,11 @@ RR format：（name，value，type，ttl）
 
   value 是地址
 
-  
-
 - Type=CNAME
 
   name 是某台主机的别名
 
   value 是权威的名字
-
-  
 
 - Type=NS
 
@@ -745,8 +741,6 @@ RR format：（name，value，type，ttl）
   value 是本域的权威域名服务器
 
   （维护用）
-
-  
 
 - Type=MX
 
@@ -898,3 +892,460 @@ Distributed Hash Table
 
 
 ## Socket编程
+
+<u>**为什么需要Socket？**</u>
+
+- 普通的I/O操作过程
+
+  打开文件->读/写操作->关闭文件
+
+- TCP/IP协议被集成到操作系统的内核中，引入了新型的“I/O”操作
+
+  1）不同的机器上的两个进程进行网络操作，如何连接？
+
+  2）网络协议具有多样性，如何进行统一操作？
+
+- 需要一种通用的网络编程接口：Socket
+
+
+
+**<u>什么是Socket？</u>**
+
+- 独立于具体协议的网络编程接口
+- 在ISO模型中，主要位于会话层和传输层之间
+- BSD Socket（伯克利套接字）是通过标准的UNIX文件描述符和其他程序通讯的一个方法，目前一斤被广泛移植到各个平台。
+
+
+
+<u>**Socket类型**</u>
+
+- 流式套接字（SOCK_STREAM）
+
+  提供了一个面向连接、可靠的数据传输服务，数据无差错、无重复的发送且按发送顺序接收。
+
+- 数据报套接字（SOCK_DGRAM）
+
+  提供无连接服务。数据包以独立数据包的形式被发送，不提供无差错保证，数据可能被丢失，重复或失序。
+
+- 原始套接字（SOCK_RAW）
+
+  可以对较低层次协议，如IP、ICMP直接访问。
+
+
+
+<u>**两类系统中使用的Socket**</u>
+
+- Windows Socket（Winsock）
+- Linux Socket（BSD Socket）
+
+
+
+### Socket常用函数
+
+#### Socket常用函数-基本函数
+
+- 网络连接函数
+
+  socket    创建套接字
+
+  bind    绑定本机端口
+
+  connect    建立连接
+
+  listen    监听端口
+
+  accept    接受连接
+
+  recv，recvfrom    数据接收
+
+  send，sendto    数据发送
+
+  close，shutdown    关闭套接字
+
+- 转换函数
+
+  1）IP地址转换函数
+
+  inet_addr()    点分十进制数表示的IP地址转换为网络字节序的IP地址
+
+  inet_ntoa()    网络字节序的IP地址转换为点分十进制数表示的IP地址
+
+  2）字节排序函数
+
+  htonl    4字节主机字节序转换为网路字节序
+
+  ntohl    4字节网络字节序转换为主机字节序
+
+  htons    2字节主机字节序转换为网络字节序
+
+  ntohs    2字节网络字节序转换为主机字节序
+
+
+
+**网络字节次序和主机字节次序**
+
+例子：在内存中双字0x01020304（DWORD）的存储方式
+
+内存地址    4000 4001 4002 4002
+
+LE                  04      03     02     01
+
+BE                  01       02     03     04
+
+网络字节顺序是TCP/IP中规定的一种数据表示格式，它与具体的CPU类型、操作系统等无关。
+
+主机字节顺序与具体的CPU类型操作系统等**<u>有关！</u>**
+
+
+
+#### **Socket常用函数-网络信息检索函数**
+
+- 网络信息检索函数
+
+  gethostname    获得主机名
+
+  getpeername    获得与套接字相连的远程协议地址
+
+  getsockname    获得套接字本地协议地址
+
+  gethostbyname    根据主机名取得主机信息
+
+  gethostbyaddr    根据主机地址取得主机信息
+
+  getprotobyname    根据协议名取得主机协议信息
+
+  getprotobynumber    根据协议号取得主机协议信息
+
+  getservbyname    根据服务名取得相关服务信息
+
+  getservbyport    根据端口号取得相关服务信息
+
+  getsockopt/setsockopt    获取/设置一个套接字选项
+
+  ioctlsocket    设置套接字的工作方式
+
+
+
+Windows Socket的启动
+
+使用Winsock API编制的网络应用程序中，在调用任何一个Winsock函数之前都必须检查协议栈的安装情况，使用函数WSAStartup()完成操作：
+
+```c
+int WSAStartup(
+
+    WORD wVersionRequested,
+
+    LPWSADATA lpWSAData
+
+);
+```
+
+wVersionRequested是一个WORD型（双字节型）数值，指定使用的版本号，对Winsock2.2而言，此参数的值为0x0202，也可以用宏MAKEWORD(2,2)来获得
+
+lpWSAData是一个指向WSADATA结构的指针，它返回关于Winsock实现的详细信息
+
+
+
+#### 创建套接字socket()函数
+
+应用程序在使用套接字通信前，必须要用有一个套接字，使用socket()函数来给应用程序创建一个套接字
+
+```c
+SOCKET socket(
+
+    int af,
+
+    int type,
+
+    int protocol
+
+);
+```
+
+<u>socket()参数说明:</u>
+
+- af参数说明套接字接口要使用的协议地址族，地址族与协议族含义相同。如果想建立一个TCP或UDP，只能用常量AF_INET表示表示使用互联网协议（IP）地址。Winsock还支持其他协议，但一般很少使用。
+
+- type参数描述套接字的类型，af是AF_INET的时候只能为SOCK_STREAM、SOCK_DGRAM或SOCK_RAW
+
+- protocol说明该套接字使用的特定协议，当协议地址族af和协议类型type确定后，协议字段可以使用的值是限定的
+
+
+|       协议       | 地址族  | 套接字类型 | 套接字类型使用的值 |         协议字段         |
+| :--------------: | :-----: | :--------: | :----------------: | :----------------------: |
+| 互联网协议（IP） | AF_INET |    TCP     |    SOCK_STREAM     |       IPPROTO_TCP        |
+|       同上       |  同上   |    UDP     |     SOCK_DGRAM     |       IPPROTO_UDP        |
+|       同上       |  同上   |    Raw     |      SOCK_RAW      | IPPROTO_RAW IPPROTO_ICMP |
+
+
+
+#### 指定本地地址-bind()函数
+
+当socket()创建了一个套接字后，需要将该套接字与该主机上提供服务的某端口联系在一起，bind()函数用于完成这样的绑定。
+
+```c
+int bind(
+    SOCKET s,
+    const struct sockaddr FAR * name,
+    int namelen
+);
+```
+
+<u>bind()参数说明：</u>
+
+- s标识一个未绑定的套接字描述字，它是socket()函数调用成功是返回的值
+- name是一个与制定协议有关的地址结构指针，储存了套接字的地址信息，Winsock中使用sockaddr_in结构指定IP地址和端口信息
+
+```c
+struct sockaddr_in{
+    short sin_family;//一般为AF_INET，表示使用IP地址族
+    u_short sin_port;//是以网络字节序表示的16位端口号
+    struct in_addr sin_addr;//是网络字节序的32位IP地址
+    char sin_zero[8];//一般不用，用0填充
+}
+```
+
+- namelen表示地址参数(name)的长度
+- IP地址参数为INADDR_ANY，则由系统内核来自动指定，port为0，则由系统指派一个1024~65535之间唯一的端口号
+
+
+
+#### 服务器端启动监听-listen() 函数
+
+- 在一个服务器端用socket()调用成功创建了一个套接字，并用bind()函数和一个指定的地址关联后，就需要指示该套接字进入监听连接请求状态，这需要通过listen()函数来实现
+
+```C
+
+```
+
+<u>listen()参数说明：</u>
+
+- s代表一个已经绑定了地址，但还未建立连接的套接字描述字
+- backlog指定了正在等待连接的最大队列长度
+
+
+
+#### 客户端请求连接-connect()函数
+
+- 当服务器端建立好套接字并与一个本地地址绑定后，就进入监听状态，等待客户发出连接请求。在客户端套接字建立好之后，就调用connect()函数来与服务器建立连接。
+
+```c
+int connect(
+    SOCKET s,
+    const struct sockadde FAR * name,
+    int namelen
+);
+```
+
+<u>connect()参数说明：</u>
+
+- s将要建立连接的套接字描述字
+- name是一个指向远端套接字地址的结构（sockaddr_in）的指针，表示s套接字欲与其建立一条连接
+- namelen是服务器端的地址长度，即name的长度
+
+
+
+<u>connect()函数的说明：</u>
+
+- 在客户端使用该函数请求建立连接时，将激活建立连接的三次握手，用来建立一条到服务器TCP的连接。如果调用该函数前没有调用bind()来绑定本地地址，则由系统隐式绑定一个地址到该套接字。
+- 该函数用在UDP的客户端时，connect()函数并不是真正的发出建立请求连接的请求，调用将从本地操作系直接返回。这样可以将服务器的地址信息保存下来，在后续UDP端口发送数据时，由套接字自动在发送函数中填入服务器地址，而不需要由应用程序在调用发送函数时填入。
+
+
+
+#### 服务器端接受连接-accept()函数
+
+- 在服务器端通过listen()函数调用表示服务器进入监听客户的连接请求状态，而在服务器端调用accept()函数时表示可以接收来自客户端由connect()发出的连接请求，双方进入连接状态
+
+```c
+SOCKET accept(
+    SOCKET s,
+    struct sockaddr FAR * addr,
+    int FAR * addrlen
+);
+```
+
+<u>accept()参数说明：</u>
+
+- s标识一个套接字，该套接字处于监听状态
+- addr是一个地址结构的指针，用来存放发出连接请求的那个客户机的IP地址信息
+- addrlen指出客户套接字地址结构的长度
+
+
+
+<u>accept()函数说明：</u>
+
+- 本函数从s的等待连接队列中抽取第一个连接，创建一个与s同类的新的套接字并返回句柄
+- 该函数用于面向连接的服务器端，在IP协议族中只用于TCP服务器端
+
+
+
+#### 发送数据-send()函数
+
+- 在已经建立连接的套接字上发送数据，可以使用send()函数
+
+```c
+int send(
+    SOCKET s,
+    const char FAR * buf,
+    int len,
+    int flags
+);
+```
+
+<u>send()参数说明：</u>
+
+- s用于标识已建立连接的套接字
+- buf是一个字符缓冲区，内有将要发送的数据
+- len即将发送的缓冲区中的字符数
+- flags用于控制数据传输的方式，0表示按正常的方式发送数据；宏MSG_DONTROUTE说明系统目标主机就在直接连接的本地网络中，无需路由选择；MSG_OOB指出数据是按带外数据发送的
+
+
+
+<u>send()函数说明：</u>
+
+send()函数适用于已建立连接的数据报或流式套接字发送数据，对于数据报类型套接字必须注意发送数据长度不大于通信子网的IP包最大长度
+
+
+
+#### 接收数据-recv()函数
+
+- 对于已建立连接的套接字来说，要从套接字上接收数据就要使用recv()函数。
+
+```c
+int recv(
+    SOCKET s,
+    char FAR * buf,
+    int len,
+    int flags
+);
+```
+
+<u>recv()参数说明：</u>
+
+- s为已建立连接的套接字
+- buf为用于接收数据的缓冲区
+- len为缓冲区的长度
+- flags制定调用的方式。0标识接受的是正常数据，无特殊行为。MSG_PEEK表示会使用有用的数据复制到所提供的接收端缓冲区内，但是没有从系统缓冲区中将数据删除。MSG_OOB表示处理数据带外数据。
+
+
+
+从无连接的套接字上接收数据-recvfrom()函数
+
+- 对于无连接的套接字来说，要从套接字上接收一个数据报并保存发送数据的原地址，就要使用recvfrom()函数。
+
+```c
+int recvfrom(
+    SOCKET s,
+    char FAR * buf,
+    int len,
+    int flags,
+    struct sockaddr FAR * from,
+    int FAR * fromlen
+);
+```
+
+<u>recvfrom()参数说明：</u>
+
+- s标识一个套接字的描述字
+- buf接收数据的缓冲区
+- len接收数据缓冲区的长度
+- flags调用操作方式，同recv()中的flags
+- from可选指针，指向装有源地址的缓冲区
+- fromlen可选指针，指向from缓冲区的长度值
+
+
+
+<u>recvfrom()函数说明：</u>
+
+该函数的用法与有连接时recv()的用法一致，要注意的是该函数也可以用于有连接时数据的接收。
+
+
+
+#### 在无连接套接字上发送数据-sendto()函数
+
+- 对于无连接的套接字来说，要从套接字上发送一个数据报，就要使用sendto()函数
+
+```c
+int sendto(
+    SOCKET s,
+    const char FAR * buf,
+    int len,
+    int flags,
+    const struct sockaddr FAR * to,
+    int tolen
+);
+```
+
+<u>sendto()参数说明：</u>
+
+- s本机的套接字
+- buf待发送数据的缓冲区
+- len指明buf缓冲区中要发送的数据长度
+- flags调用方式标志位，同send()中的flags
+- to可选指针，指向接收数据的目的套接字地址
+- tolen是to所指的地址的长度
+
+
+
+<u>sendto()函数说明：</u>
+
+该函数的使用方式类似send()函数，当用于无连接套接字接口，调用函数前要设置，指出目标IP地址和目标端口号。如果用于有连接的套接字时，则不能指定目标地址和目标端口，将to设置为空，地址长度设置为0。当然在有连接的情况下很少使用该函数。
+
+
+
+#### 关闭读写通道-shutdown()函数
+
+- 在一个套接字上的读写操作完成后，应该首先使用shutdown()函数来关闭套接字的读通道、写通道或读写通道，这样做的好处是当双方不再有数据要发送或接收时，可以通知对方，以防止数据丢失，并能“优雅”地关闭连接。
+
+```c
+int shutdown(
+    SOCKET s,
+    int how
+);
+```
+
+<u>shutdown()参数说明：</u>
+
+- s标识一个套接字的描述字
+- how是一个标志，用于描述禁止哪些操作，取值如下所示
+
+|  关闭方式  | 参数值 |                             说明                             |
+| :--------: | :----: | :----------------------------------------------------------: |
+| SD_RECEIVE |   0    | 表示不允许再调用接收函数，它关闭读通道。套接字接收缓冲区中的所有数据都被丢弃，并且有新数据到达套接字时，也被TCP协议层丢弃，但它对发送缓冲区没有影响，进程仍然可以在套接字上发送数据。 |
+|  SD_SEND   |   1    | 表示不允许再调用发送函数，它关闭写通道。在套接字发送缓冲区中的数据都被发送出去，得到接收端确认之后，就生成一个FIN包关闭连接。但它对接收缓冲区没有影响，进程仍然可以在套接字上接收数据。 |
+|  SD_BOTH   |   2    |  关闭读写通道，相当于执行了上面SD_RECEIVE和SD_SEND两个命令   |
+
+
+
+#### 关闭套接字-closesocket()函数
+
+- shutdown函数只关闭读写通道，并不关闭套接字，且套接字所占有的资源将被一直保留至closesocket()调用之前。
+- 一个套接字不再使用时一定要关闭这个套接字，以释放与该套接字关联的所有资源，包括等候处理的数据
+
+```c
+int closesocket(
+    SOCKET s
+);
+```
+
+<u>closesocket()参数说明：</u>
+
+- s表示即将被关闭的套接字
+
+
+
+#### Winsock-WSACleanup()函数
+
+- 当应用程序不再使用Winsock API中的任何函数时，必须调用WSACleanup()将其从Windows Socket的实现中注销，以释放为此应用程序或DLL分配的任何资源。
+
+```c
+int WSACleanup(void);
+```
+
+<u>WSACleanup()函数说明:</u>
+
+WSACleanup()函数是任何一个Winsock应用程序在最后必须要调用的函数。在一个多线程的环境下，WSACleanup()函数终止了Windows Sockets在所有线程上的操作。
+
+
+
+TCP/IP网络程序框架
