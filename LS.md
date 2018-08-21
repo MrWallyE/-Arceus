@@ -35,7 +35,8 @@
 内容：
 
 1. [计算机网络自学笔记](https://www.icourse163.org/learn/HDU-1002598057?tid=1002788111#/learn/content?type=detail&id=1004060885&cid=1004996388)（应用层内容）
-2. 
+2. [树莓派-pypi-UART串口](http://nicekwell.net/blog/20171120/shu-mei-pai-pypi-uartchuan-kou.html)
+3. [树莓派-wiringPi-UART串口](http://nicekwell.net/blog/20171123/shu-mei-pai-wiringpi-uartchuan-kou.html)
 
 笔记：详见ComputerNetworking.md
 
