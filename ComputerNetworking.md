@@ -1115,7 +1115,10 @@ struct sockaddr_in{
 - 在一个服务器端用socket()调用成功创建了一个套接字，并用bind()函数和一个指定的地址关联后，就需要指示该套接字进入监听连接请求状态，这需要通过listen()函数来实现
 
 ```C
-
+int listen(
+    SOCKET s,
+    int backlog
+);
 ```
 
 <u>listen()参数说明：</u>

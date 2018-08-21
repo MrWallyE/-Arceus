@@ -58,21 +58,44 @@ adduser <用户名>
 **赋予其超级权限：**（需要在管理员用户下执行）
 
 ```
-usermod -g root <用户名>
+usermod -g root <用户名>    //将用户添加至root组
+nano /etc/sudoers    //编辑sudoers文件
+```
+
+**增加新的用户名，后面ALL=(ALL) ALL照原格式写:**
+
+```c
+# User privilege specification
+root    ALL=(ALL) ALL
+<用户名>    ALL=(ALL) ALL
 ```
 
 **检验是否成功赋予：**
 
 切换至该用户：
 
-```
+```c
 su <用户名>
 ```
 
-尝试打开只有管理员权限才能打开的目录：
+1）尝试打开只有管理员权限才能打开的目录：
 
-```
+```c
 nano /etc/passwd
 ```
 
 如果能打开，则表明已成功将该用户移至管理员组。
+
+2）尝试使用 sudo 命令删除pi用户的密码：
+
+```c
+sudo passwd pi -d
+```
+
+键入密码，如出现：
+
+```c
+
+```
+
+则表明成功清除pi用户密码，赋予权限成功！

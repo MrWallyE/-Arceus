@@ -6,7 +6,7 @@
 
 笔记：详见Linux.md
 
-
+# 
 
 # Git基础学习
 
@@ -15,6 +15,8 @@
 内容：[廖雪峰官方网站Git教程](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000) **另加自行补充内容**
 
 笔记：详见Git.md
+
+# 
 
 # 搭建Web服务器
 
@@ -28,17 +30,7 @@
 4. [django,uwsgi,nginx安装与设置](https://blog.csdn.net/weixiazailaide/article/details/52735076)
 5. [Django，Nginx和uWSGI关系简介](https://blog.csdn.net/cjsh_123456/article/details/80086356)
 
-# Socket和串口通信的程序 
-
-时间：2018.7.29
-
-内容：
-
-1. [计算机网络自学笔记](https://www.icourse163.org/learn/HDU-1002598057?tid=1002788111#/learn/content?type=detail&id=1004060885&cid=1004996388)（应用层内容）
-2. [树莓派-pypi-UART串口](http://nicekwell.net/blog/20171120/shu-mei-pai-pypi-uartchuan-kou.html)
-3. [树莓派-wiringPi-UART串口](http://nicekwell.net/blog/20171123/shu-mei-pai-wiringpi-uartchuan-kou.html)
-
-笔记：详见ComputerNetworking.md
+# 
 
 # 创建账户以及赋予其超级权限
 
@@ -48,3 +40,18 @@
 
 1. [Linux 入门基础](http://study.163.com/course/courseMain.htm?courseId=232007) (用户相关内容)
 2. [linux添加管理员用户](https://jingyan.baidu.com/album/20b68a889a0147796cec621d.html?picindex=2)
+
+# 
+
+# Socket和串口通信的程序 
+
+时间：2018.7.29
+
+内容：
+
+1. [计算机网络自学笔记](https://www.icourse163.org/learn/HDU-1002598057?tid=1002788111#/learn/content?type=detail&id=1004060885&cid=1004996388)（应用层内容）
+2. [树莓派-pypi-UART串口](http://nicekwell.net/blog/20171120/shu-mei-pai-pypi-uartchuan-kou.html)
+3. [树莓派-wiringPi-UART串口](http://nicekwell.net/blog/20171123/shu-mei-pai-wiringpi-uartchuan-kou.html)
+4. [Linux Socket编程（不限Linux）](http://www.cnblogs.com/skynet/archive/2010/12/12/1903949.html)（博客园）
+
+笔记：详见ComputerNetworking.md
