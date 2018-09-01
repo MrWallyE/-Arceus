@@ -50,8 +50,13 @@
 内容：
 
 1. [计算机网络自学笔记](https://www.icourse163.org/learn/HDU-1002598057?tid=1002788111#/learn/content?type=detail&id=1004060885&cid=1004996388)（应用层内容）
-2. [树莓派-pypi-UART串口](http://nicekwell.net/blog/20171120/shu-mei-pai-pypi-uartchuan-kou.html)
-3. [树莓派-wiringPi-UART串口](http://nicekwell.net/blog/20171123/shu-mei-pai-wiringpi-uartchuan-kou.html)
-4. [Linux Socket编程（不限Linux）](http://www.cnblogs.com/skynet/archive/2010/12/12/1903949.html)（博客园）
+2. [树莓派3串口UART使用问题的解决方法](http://ukonline2000.com/?p=880)
+3. [树莓派-pypi-UART串口](http://nicekwell.net/blog/20171120/shu-mei-pai-pypi-uartchuan-kou.html)
+4. [树莓派-wiringPi-UART串口](http://nicekwell.net/blog/20171123/shu-mei-pai-wiringpi-uartchuan-kou.html)
+5. [Linux Socket编程（不限Linux）](http://www.cnblogs.com/skynet/archive/2010/12/12/1903949.html)（博客园）
+6. [Pyserial-python的串口通讯模块](http://zhangweide.cn/archive/2013/python-serial-package.html)
+7. [树莓派通过串口接发数据（serial版）](https://blog.csdn.net/weixin_41656968/article/details/80085836)
+8. [Python下的socket编程](https://blog.csdn.net/weixin_41656968/article/details/80033617)
+9. 
 
 笔记：详见ComputerNetworking.md
